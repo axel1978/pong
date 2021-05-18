@@ -15,20 +15,18 @@ import java.util.TimerTask;
  * @author Miguel Ángel Ruiz-Valdepeñas Fernández
  */
 public class Ball {
-    
-    
-   
     private byte directionX;
     private byte directionY;
     private byte golLeft;
     private byte golRight;
+    private String result;
     
     private final BitmapFont LEFT;
     private final BitmapFont RIGHT;
+    private final BitmapFont RESULT;
     private final Rectangle RECTANGLE;
     private final Texture TEXTURE;
     private final Sound WALL;
-    private final Sound HIT;
     private final Sound FAIL;
     
     private final float VEL_X;
@@ -40,11 +38,12 @@ public class Ball {
         VEL_Y = 400f;
         directionX = 1;
         directionY = 1;
+        result="";
         RECTANGLE = new Rectangle(x,y,TEXTURE.getWidth(),TEXTURE.getHeight());
-        LEFT = new BitmapFont(Gdx.files.internal("fonts/*.fnt"),Gdx.files.internal("fonts/*.png"),false);
-        RIGHT = new BitmapFont(Gdx.files.internal("fonts/*.fnt"),Gdx.files.internal("fonts/*.png"),false);
+        LEFT = new BitmapFont(Gdx.files.internal("fonts/numbers.fnt"),Gdx.files.internal("fonts/numbers.png"),false);
+        RIGHT = new BitmapFont(Gdx.files.internal("fonts/numbers.fnt"),Gdx.files.internal("fonts/numbers.png"),false);
+        RESULT= new BitmapFont(Gdx.files.internal("fonts/title.fnt"),Gdx.files.internal("fonts/title.png"),false);
         WALL = (Sound) Gdx.audio.newSound(Gdx.files.internal("sounds/pong_wall.wav"));
-        HIT =  (Sound) Gdx.audio.newSound(Gdx.files.internal("sounds/pong_hit.wav"));
         FAIL = (Sound) Gdx.audio.newSound(Gdx.files.internal("sounds/pong_fail.wav"));
     }
     
@@ -53,7 +52,7 @@ public class Ball {
         batch.draw(TEXTURE,RECTANGLE.x,RECTANGLE.y);
         LEFT.draw(batch,String.valueOf(golLeft),Gdx.graphics.getWidth()/2-100,Gdx.graphics.getHeight()-20);
         RIGHT.draw(batch,String.valueOf(golRight),Gdx.graphics.getWidth()/2+90,Gdx.graphics.getHeight()-20);
-        
+        RESULT.draw(batch,result,Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight()/2);
     }
     
     public void update(float delta){
@@ -80,45 +79,24 @@ public class Ball {
     private  void goal(){
         
         if(RECTANGLE.x> Gdx.graphics.getWidth()+10){
-            reset();
+            FAIL.play();
             golLeft+=1;
-            Timer timer = new Timer();
-            TimerTask task= new TimerTask() {
-                
-                @Override
-                public void run() {
-                    Random rn= new Random();
-                    if(rn.nextInt(2)>0){
-                        directionY=1;
-                    }else{
-                       directionY=-1; 
-                    }
-                    directionX=-1;
-                    
-                }
-                   
-            };
-            timer.schedule(task, 1500);
+            if(golLeft < 10)
+                reset((byte) -1);
+            else
+            	win("left");
+            	
+
         }else if(RECTANGLE.x<-15){
-            reset();
+            FAIL.play();
             golRight+=1;
-            Timer timer = new Timer();
-            TimerTask task= new TimerTask() {
-                @Override
-                public void run() {
-                    Random rn= new Random();
-                    if(rn.nextInt(2)>0){
-                        directionY=1;
-                    }else{
-                       directionY=-1; 
-                    }
-                    directionX=1;
-                }
-                   
-            };
-            timer.schedule(task,1500);
+            if(golRight < 10)
+                reset((byte) 1);
+            else
+            	win("right");
         }
     }
+
     
     public Rectangle getPosition(){
         return RECTANGLE;
@@ -128,7 +106,55 @@ public class Ball {
         this.directionX= directionX;
     }
     
-    private void reset(){
+    public void setX(float x) {
+    	RECTANGLE.x=x;
+    }
+    
+    private void reset(byte dir){
+        resetBall();
+        Timer timer = new Timer();
+        TimerTask task= new TimerTask() {
+            
+            @Override
+            public void run() {
+                Random rn= new Random();
+                if(rn.nextInt(2)>0){
+                    directionY=1;
+                }else{
+                   directionY=-1; 
+                }
+                directionX= dir;
+                
+            }
+               
+        };
+        timer.schedule(task, 1500);
+        
+    }
+    
+
+    
+    public void win (String str) {
+        resetBall();
+    	if(str.equals("left")) {
+    		result="You Win";
+    	}else if(str.equals("right")) {
+    		result= "You Lose";
+    	}
+    	
+        Timer timer = new Timer();
+        TimerTask task= new TimerTask() {
+            
+            @Override
+            public void run() {
+            	AllScreens.screenGame.setExit(true);
+            }
+      
+        };
+        timer.schedule(task, 1500);
+    }
+    
+    private void resetBall() {
         directionX=0;
         directionY=0;
         RECTANGLE.x=Gdx.graphics.getWidth()/2 - RECTANGLE.width/2;
@@ -140,7 +166,6 @@ public class Ball {
         LEFT.dispose();
         RIGHT.dispose();
         WALL.dispose();
-        HIT.dispose();
         FAIL.dispose();
     }
  

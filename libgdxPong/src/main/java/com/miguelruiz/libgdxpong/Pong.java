@@ -2,6 +2,7 @@
 package com.miguelruiz.libgdxpong;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 
@@ -10,12 +11,21 @@ import com.badlogic.gdx.Game;
  * @author Miguel Ángel Ruiz-Valdepeñas Fernández
  */
 public class Pong extends Game{
-    private Screens screen01;
+    private SpriteBatch batch;
     
     @Override
     public void create() {
-        screen01= new Screen01(this);
-        this.setScreen(screen01);
+    	batch= new SpriteBatch();
+    	AllScreens.pong=this;
+    	AllScreens.screenGame = new ScreenGame(batch);
+    	AllScreens.screenMenu = new ScreenMenu(batch);
+        this.setScreen(AllScreens.screenMenu);
+    }
+    
+    
+    
+    public void dispose() {
+    	AllScreens.screenMenu.dispose();
     }
     
 }

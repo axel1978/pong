@@ -8,7 +8,7 @@
  <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gdx.version>1.10.0</gdx.version>
-        <java.version>10</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -49,6 +49,11 @@
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-openal</artifactId>
             <version>0.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-controllers</artifactId>
+            <version>1.9.13</version>
         </dependency>
     </dependencies>
     <build>

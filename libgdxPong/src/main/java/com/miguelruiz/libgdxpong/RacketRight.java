@@ -43,6 +43,7 @@ public class RacketRight extends Racket {
     @Override
     public void crashBall() {
         if(rectangle.overlaps(ball.getPosition())){
+           HIT.play();
            byte direction=-1;
            ball.setDirectionX(direction);
         }

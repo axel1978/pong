@@ -2,18 +2,18 @@
 package com.miguelruiz.libgdxpong;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  *
  * @author Miguel Ángel Ruiz-Valdepeñas Fernández
  */
 public class Screens implements Screen {
-    private final Pong pong;
+	protected SpriteBatch batch;
 
-    public Screens(Pong pong) {
-        this.pong = pong;
+    public Screens(SpriteBatch batch) {
+    	this.batch=batch;
     }
-
     @Override
     public void show() {
        

@@ -8,6 +8,9 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
  * @author Miguel Ángel Ruiz-Valdepeñas Fernández
  */
 public class Main {
+	
+	protected static Lwjgl3Application app;
+	
          public static void main (String [] args){
              Lwjgl3ApplicationConfiguration config= new Lwjgl3ApplicationConfiguration();
              config.setIdleFPS(60);
@@ -16,9 +19,9 @@ public class Main {
              config.setResizable(false);
              config.setDecorated(true);
              config.setWindowIcon("images/axel.png");
-             config.setWindowedMode(1280,800);
-             //config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
-        var app= new Lwjgl3Application(new Pong(),config);
+             //config.setWindowedMode(1280,800);
+             config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+             app= new Lwjgl3Application(new Pong(),config);
          
     }
 }
